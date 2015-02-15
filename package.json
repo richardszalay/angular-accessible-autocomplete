@@ -1,0 +1,25 @@
+{
+  "name": "angular-accessible-autocomplete",
+  "version": "1.0.0",
+  "description": "Autocomplete directive for AngularJS with priorities around (ARIA) accessibility and flexibility.",
+  "directories": {
+    "example": "example"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.2.0",
+    "angular-mocks": "^1.3.13",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-firefox-launcher": "^0.1.4",
+    "chai": "^2.0.0",
+    "karma-mocha": "^0.1.10",
+    "karma-jasmine": "^0.3.5",
+    "karma-sinon": "^1.0.4",
+    "sinon": "^1.12.2",
+    "mocha": "^2.1.0"
+  },
+  "scripts": {
+    "test": "karma --start --single-run"
+  },
+  "author": ""
+}
