@@ -14,4 +14,4 @@ before_script:
   - 'npm install -g bower karma-cli'
   - 'bower install'
 
-test: karma start --single-run --browsers Firefox
+script: karma start --single-run --browsers Firefox
