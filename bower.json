@@ -4,7 +4,7 @@
   "authors": [
     "Richard Szalay <richard@richardszalay.com>"
   ],
-  "main": "js/rszAutocomplete.js",
+  "main": "js/accessibleAutocomplete.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
