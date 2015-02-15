@@ -1,10 +1,10 @@
 <html>
 <head>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
-	<script type="text/javascript" src="../lib/rszAutocomplete.js"></script>
+	<script type="text/javascript" src="../lib/accessibleAutocomplete.js"></script>
 	<script type="text/javascript">
 		(function() {
-			angular.module('rszAutocompleteExample', ['rszAutocomplete'])
+			angular.module('rszAutocompleteExample', ['accessibleAutocomplete'])
 				.controller('ExampleCtrl', function($scope, $timeout) {
 					$scope.getSuggestions = function(input) {
 						return $timeout(function(){}, 500)
@@ -26,7 +26,7 @@
 </head>
 <body ng-app="rszAutocompleteExample" ng-controller="ExampleCtrl">
 	<input type="text" aria-autocomplete="both" 
-			rsz-autocomplete="getSuggestions" 
+			accessible-autocomplete="getSuggestions" 
 			accessible-autocomplete-selected="handleSelection"
 			/>
 
