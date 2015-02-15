@@ -12,6 +12,10 @@
 								return ['item 1', 'item 2', 'item 3'];
 							});
 					};
+
+					$scope.handleSelection = function(selection) {
+						$scope.selectedItem = selection;
+					};
 				});
 		})();
 	</script>
@@ -21,6 +25,13 @@
 	</style>
 </head>
 <body ng-app="rszAutocompleteExample" ng-controller="ExampleCtrl">
-	<input type="text" aria-autocomplete="list" rsz-autocomplete="getSuggestions" />
+	<input type="text" aria-autocomplete="both" 
+			rsz-autocomplete="getSuggestions" 
+			accessible-autocomplete-selected="handleSelection"
+			/>
+
+	<div ng-if="selectedItem">
+		Selected: <span ng-bind="selectedItem"></span>
+	</div>
 </body>
 </html>

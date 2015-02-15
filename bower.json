@@ -1,0 +1,22 @@
+{
+  "name": "angular-accessible-autocomplete",
+  "version": "0.0.0",
+  "authors": [
+    "Richard Szalay <richard@richardszalay.com>"
+  ],
+  "main": "js/rszAutocomplete.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.2.28"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.3.13"
+  }
+}
