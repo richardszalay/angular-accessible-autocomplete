@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
@@ -9,19 +10,77 @@
 					$scope.getSuggestions = function(input) {
 						return $timeout(function(){}, 500)
 							.then(function() {
-								return ['item 1', 'item 2', 'item 3'];
+								return ['item 1', 'item 2', 'item 3', 'item 4'];
 							});
 					};
 
 					$scope.handleSelection = function(selection) {
 						$scope.selectedItem = selection;
 					};
+				})
+				.controller('GroupedExampleCtrl', function($scope) {
+					function Animal(type, name) {
+						this.type = type;
+						this.name = name;
+					};
+					Animal.prototype.toString = function() {
+						return this.name;
+					};
+
+					var baseOptions = [
+						new Animal('cat', 'Miggles'),
+						new Animal('cat', 'Michael'),
+						new Animal('dog', 'Miles'),
+						new Animal('dog', 'Milo')
+					];
+
+					$scope.getSuggestions = function(input) {
+						var inputLower = input.toLowerCase();
+						return baseOptions.filter(function(o) {
+							return input && input.length && o.name.toLowerCase().indexOf(inputLower) != -1;
+						});
+					};
+				})
+				.controller('GroupedResultsCtrl', function($scope) {
+					// 
+					var getIndexedTuple = function(baseIndex) {
+						return function(value, i) {
+							return {
+								value: value, 
+								index: i+baseIndex, 
+								toString: function() { return value.toString(); }
+							};
+						};
+					};
+
+					var groupSuggestions = function(suggestions) {
+						return suggestions.reduce(function(col, cur, i) {
+							if (cur.type == 'cat')
+								col.cats.push({value: cur, index: i});
+							else
+								col.dogs.push({value: cur, index: i});
+							return col;
+						}, {cats: [], dogs: []});
+					};
+
+					var updateGroups = function() {
+						$scope.groupedSuggestions = groupSuggestions($scope.suggestions || []);
+					};
+
+					$scope.$watch('suggestions', updateGroups);
 				});
 		})();
 	</script>
 	<style type="text/css">
+		input { display: block; }
 		.rs-autocomplete { list-style: none; margin: 0; padding: 0; border: solid black 1; }
 		.rs-autocomplete li[aria-selected=true] { font-weight: bold; }
+
+		input, .rs-autocomplete { width: 300px;}
+
+		ul.cats { border-bottom: solid black 1px; }
+		ul.cats li { color: gray; }
+		ul.dogs li { color: blue; }
 	</style>
 </head>
 <body ng-app="rszAutocompleteExample" ng-controller="ExampleCtrl">
@@ -33,5 +92,56 @@
 	<div ng-if="selectedItem">
 		Selected: <span ng-bind="selectedItem"></span>
 	</div>
+
+	<script type="text/ng-template" id="external-template">
+		<ul class="rs-autocomplete" role="listbox" aria-expanded="{{showSuggestions}}" ng-show="showSuggestions" id="{{suggestionsListId}}">
+		<li ng-repeat="suggestion in suggestions"
+		    id="{{suggestionsListId + '-' + $index}}"
+		    role="option" aria-selected="{{$index == selectedSuggestionIndex}}"
+		    ng-click="selectSuggestion(suggestion)"
+		>{{suggestion}}!</li>
+		</ul>
+	</script>
+
+	<input type="text" aria-autocomplete="both" 
+			accessible-autocomplete="getSuggestions" 
+			accessible-autocomplete-selected="handleSelection"
+			accessible-autocomplete-template-url="external-template"
+			accessible-autocomplete-minimum-length="1"
+			/>
+
+
+	<h2>Example 3: Grouped results</h2>
+
+	<p>This example shows suggestions grouped for display purposes, while still supporting a flat "selected index" structure.</p>
+
+	<p>Cats are displayed in gray, dogs in blue. All names begin with "mi"</p>
+
+	<input type="text" aria-autocomplete="both" 
+			ng-controller="GroupedExampleCtrl"
+			accessible-autocomplete="getSuggestions" 
+			accessible-autocomplete-selected="handleSelection"
+			accessible-autocomplete-template-url="grouped-template"
+			/>
+
+	<script type="text/ng-template" id="grouped-template">
+		<div role="listbox" aria-expanded="{{showSuggestions}}" ng-show="showSuggestions" id="{{suggestionsListId}}" ng-controller="GroupedResultsCtrl">
+			<ul class="rs-autocomplete cats">
+				<li ng-repeat="suggestion in groupedSuggestions.cats"
+				    id="{{suggestionsListId + '-' + suggestion.index}}"
+				    role="option" aria-selected="{{suggestion.index == selectedSuggestionIndex}}"
+				    ng-click="selectSuggestion(suggestion.value)"
+				    ng-bind="suggestion.value.name"
+				></li>
+			</ul>
+			<ul class="rs-autocomplete dogs">
+				<li ng-repeat="suggestion in groupedSuggestions.dogs"
+				    id="{{suggestionsListId + '-' + suggestion.index}}"
+				    role="option" aria-selected="{{suggestion.index == selectedSuggestionIndex}}"
+				    ng-click="selectSuggestion(suggestion.value)"
+				    ng-bind="suggestion.value.name"
+				></li>
+			</ul>
+	</script>
 </body>
 </html>
